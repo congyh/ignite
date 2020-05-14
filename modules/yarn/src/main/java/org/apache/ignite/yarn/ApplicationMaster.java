@@ -381,7 +381,7 @@ public class ApplicationMaster implements AMRMClientAsync.CallbackHandler {
             cfgPath = new Path(props.igniteWorkDir() + File.separator + IgniteYarnUtils.DEFAULT_IGNITE_CONFIG);
 
             // Create file. Override by default.
-            FSDataOutputStream outputStream = fs.create(cfgPath, true);
+            FSDataOutputStream outputStream = fs.create(cfgPath, true); // Note: TODO: the fs here is not right.
 
             IOUtils.copy(input, outputStream);
 
