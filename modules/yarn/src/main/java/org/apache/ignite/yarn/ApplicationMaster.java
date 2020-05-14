@@ -360,8 +360,6 @@ public class ApplicationMaster implements AMRMClientAsync.CallbackHandler {
             allTokens = IgniteYarnUtils.createTokenBuffer(cred);
         }
 
-        fs = FileSystem.get(conf);
-
         nmClient = NMClient.createNMClient();
 
         nmClient.init(conf);
@@ -379,6 +377,10 @@ public class ApplicationMaster implements AMRMClientAsync.CallbackHandler {
                 .getResourceAsStream(IgniteYarnUtils.DEFAULT_IGNITE_CONFIG);
 
             cfgPath = new Path(props.igniteWorkDir() + File.separator + IgniteYarnUtils.DEFAULT_IGNITE_CONFIG);
+
+            // Use the name server of IGNITE_WORKING_DIR as default fs.
+            // This is the only place fs field is write (excluding tests).
+            fs = cfgPath.getFileSystem(conf);
 
             // Create file. Override by default.
             FSDataOutputStream outputStream = fs.create(cfgPath, true);
